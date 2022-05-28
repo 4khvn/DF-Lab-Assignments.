@@ -11,14 +11,16 @@ x=0
 y=0
 check=1
 i=0
-for filename in os.listdir(directory1):
-    f = os.path.join(directory1, filename)
-    if os.path.isfile(f):
-        x+=1
-for filename in os.listdir(directory2):
-    f = os.path.join(directory2, filename)
-    if os.path.isfile(f):
-        y+=1
+for root, dirs, files in os.walk(directory1):
+    for filename in files:
+        f = os.path.join(root, filename)
+        if os.path.isfile(f):
+            x+=1
+for root, dirs, files in os.walk(directory1):
+    for filename in files:
+        f = os.path.join(root, filename)
+        if os.path.isfile(f):
+            y+=1
 if x != y:
    print("Not Same")
    print("Directory 1 files",x)
@@ -28,23 +30,25 @@ else:
     q = None
     r = None
     s = None
-    for filename in os.listdir(directory1):
-       i+=1
-       j=0
-       hash_algo=hashlib.sha256()
-       f = os.path.join(directory1, filename)
-       if os.path.isfile(f):
-           p = open(f,'rb').read()
-           hash_algo.update(p)
-           q = hash_algo.hexdigest()
-           for filename1 in os.listdir(directory2):
-               j+=1
-               hash_algo=hashlib.sha256()
-               u = os.path.join(directory2, filename1)
-               if os.path.isfile(u):
-                   r = open(u,'rb').read()
-                   hash_algo.update(r)
-                   s = hash_algo.hexdigest()
+    for root, dirs, files in os.walk(directory1):
+        for filename in files:
+           i+=1
+           j=0
+           hash_algo=hashlib.sha256()
+           f = os.path.join(directory1, filename)
+           if os.path.isfile(f):
+               p = open(f,'rb').read()
+               hash_algo.update(p)
+               q = hash_algo.hexdigest()
+           for root, dirs, files in os.walk(directory1):
+               for filename in files:
+                   j+=1
+                   hash_algo=hashlib.sha256()
+                   u = os.path.join(directory2, filename1)
+                   if os.path.isfile(u):
+                       r = open(u,'rb').read()
+                       hash_algo.update(r)
+                       s = hash_algo.hexdigest()
                    if s == q:
                        check+=1
                        continue
